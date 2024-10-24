@@ -64,7 +64,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "NiftyCo\\AdvancedDatabaseSessions\\ServiceProvider"
+                "NiftyCo\\OgImage\\ServiceProvider"
             ]
         }
     },
