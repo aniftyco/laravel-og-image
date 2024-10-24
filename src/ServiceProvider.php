@@ -2,6 +2,7 @@
 
 namespace NiftyCo\OgImage;
 
+use Illuminate\Http\Request;
 use Illuminate\Support;
 
 
@@ -12,7 +13,9 @@ class ServiceProvider extends Support\ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton('og-image.generator', function ($app) {
+            return new Generator($app['view']);
+        });
     }
 
     /**
@@ -20,6 +23,8 @@ class ServiceProvider extends Support\ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app->make('router')->get('/og-image', function (Request $request) {
+            return $this->app->make('og-image.generator')->make($request->get('template'), $request->except('template'));
+        });
     }
 }

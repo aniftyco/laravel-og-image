@@ -20,12 +20,16 @@
         "OG Image"
     ],
     "require": {
-        "php": "^8.1"
+        "php": "^8.1",
+        "chrome-php/chrome": "^1.11"
     },
     "autoload": {
         "psr-4": {
             "NiftyCo\\OgImage\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "require-dev": {
         "orchestra/testbench": "^9.5",
