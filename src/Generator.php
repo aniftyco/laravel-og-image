@@ -5,7 +5,6 @@ namespace NiftyCo\OgImage;
 use HeadlessChromium\Browser\ProcessAwareBrowser;
 use HeadlessChromium\BrowserFactory;
 use HeadlessChromium\Page;
-use Illuminate\Http\Response;
 use Illuminate\View\Factory;
 
 class Generator
@@ -29,7 +28,7 @@ class Generator
     ]);
   }
 
-  public function make(string $view, array $data = []): Response
+  public function make(string $view, array $data = []): Image
   {
     $this->page = $this->browser->createPage();
     $this->page->setHtml($this->view->make('og-image.' . $view, $data)->render(), eventName: Page::NETWORK_IDLE);
@@ -38,10 +37,7 @@ class Generator
 
     $this->page->setViewport(1200, 630);
 
-    return response(base64_decode($this->page->screenshot()->getBase64()), headers: [
-      'content-type' => 'image/png',
-      'cache-control' => 'public, immutable, no-transform, s-maxage=31536000, max-age=31536000'
-    ]);
+    return new Image($this->page->screenshot());
   }
 
   private function injectJs(): string
