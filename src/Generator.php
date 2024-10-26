@@ -25,7 +25,7 @@ class Generator
   public function make(string $view, array $data = []): Image
   {
     $this->page = $this->browser->createPage();
-    $this->page->setHtml($this->view->make('og-image.' . $view, $data)->render(), eventName: $this->config['event_name']);
+    $this->page->setHtml($this->view->make($this->config['template_dir'] . '.' . $view, $data)->render(), eventName: $this->config['event_name']);
 
     $this->page->evaluate($this->injectJs());
 
