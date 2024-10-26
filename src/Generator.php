@@ -13,31 +13,25 @@ class Generator
 
   public Page $page;
 
-  public function __construct(private Factory $view, array $options = [], array $flags = [])
+  public function __construct(private Factory $view, private array $config = [])
   {
     $this->browser = (new BrowserFactory())->createBrowser([
-      ...$options,
-      'noSandbox' => false,
-      'ignoreCertificateErrors' => true,
-      'customFlags' => [
-        ...$flags,
-        '--disable-gpu',
-        '--disable-dev-shm-usage',
-        '--disable-setuid-sandbox',
-      ],
+      'noSandbox' => $config['no_sandbox'],
+      'ignoreCertificateErrors' => $config['ignore_certificate_errors'],
+      'customFlags' => $config['custom_flags'],
     ]);
   }
 
   public function make(string $view, array $data = []): Image
   {
     $this->page = $this->browser->createPage();
-    $this->page->setHtml($this->view->make('og-image.' . $view, $data)->render(), eventName: Page::NETWORK_IDLE);
+    $this->page->setHtml($this->view->make('og-image.' . $view, $data)->render(), eventName: $this->config['event_name']);
 
     $this->page->evaluate($this->injectJs());
 
-    $this->page->setViewport(1200, 630);
+    $this->page->setViewport($this->config['view_port']['width'], $this->config['view_port']['height']);
 
-    return new Image($this->page->screenshot());
+    return new Image($this->page->screenshot(), $this->config);
   }
 
   private function injectJs(): string
