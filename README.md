@@ -33,12 +33,22 @@ It is telling the generator to use the `post` template and pass the `$title` pro
 
 ### `og_image()` Helper
 
-You can also load up your own route and do anything you want and just return `og_image()` and generate an image on the fly.
+Using the `og_image()` helper you have more control over what happens with the OG Images generated. This helper accepts a `template` and an array of data to pass to the view.
+
+#### Returning the OG image as a response:
 
 ```php
 Route::get('/{user}.png', function(User $user) {
     return og_image('user', compact('user'));
 });
+```
+
+#### Saving the OG image to a disk:
+
+```php
+$image = og_image('user', compact('user'));
+
+$image->storeAs('og-images', ['disk' => 's3']);
 ```
 
 ## Contributing
