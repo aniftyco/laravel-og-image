@@ -51,6 +51,42 @@ $image = og_image('user', compact('user'));
 $image->storeAs('og-images', ['disk' => 's3']);
 ```
 
+### Writing templates with Blade
+
+Your images are generated using Blade templates, using the following example template in `resources/views/og-image/example.blade.php`:
+
+```blade
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @vite(['resources/css/app.css'])
+  </head>
+
+  <body class="flex h-screen flex-col bg-[#F8F2E6]">
+    <div class="shrink-0 px-20 pt-24 text-gray-900">
+      <h1 class="text-[2.5rem] font-extrabold leading-[1.2]">
+        {{ $name }}
+      </h1>
+    </div>
+    <div class="flex grow items-center px-20">
+      <h1 class="text-[5rem] font-extrabold leading-[1.2] text-gray-900">
+        {{ $text }}
+      </h1>
+    </div>
+  </body>
+
+</html>
+
+```
+
+Then if you make a request to `/og-image?template=example&name=OG%20Image%20Generator&text=The%20fastest%20way%20to%20create%20open%20graph%20images%20for%20Laravel!` you will get the following image:
+
+![](.github/assets/example.png)
+
 ## Contributing
 
 Thank you for considering contributing to the Attachments for Laravel package! You can read the contribution guide [here](CONTRIBUTING.md).
