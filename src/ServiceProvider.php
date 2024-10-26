@@ -2,7 +2,10 @@
 
 namespace NiftyCo\OgImage;
 
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support;
+use Illuminate\Support\Facades\RateLimiter;
 use NiftyCo\OgImage\Controllers\OGImageController;
 
 class ServiceProvider extends Support\ServiceProvider
@@ -37,6 +40,8 @@ class ServiceProvider extends Support\ServiceProvider
             __DIR__ . '/../config/og-image.php' => config_path('og-image.php'),
         ]);
 
-        $this->app->make('router')->get('/og-image', OGImageController::class);
+        RateLimiter::for('og-image', fn(Request $request) => Limit::perSecond(1)->by($request->ip()));
+
+        $this->app->make('router')->get('/og-image', OGImageController::class)->middleware('throttle:og-image');
     }
 }
