@@ -15,7 +15,7 @@ class Generator
 
   public function __construct(private Factory $view, private array $config = [])
   {
-    $this->browser = (new BrowserFactory())->createBrowser([
+    $this->browser = (new BrowserFactory($config['binary']))->createBrowser([
       'noSandbox' => $config['no_sandbox'],
       'ignoreCertificateErrors' => $config['ignore_certificate_errors'],
       'customFlags' => $config['custom_flags'],
