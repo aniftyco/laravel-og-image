@@ -2,8 +2,8 @@
 
 namespace NiftyCo\OgImage;
 
-use Illuminate\Http\Request;
 use Illuminate\Support;
+use NiftyCo\OgImage\Controllers\OGImageController;
 
 class ServiceProvider extends Support\ServiceProvider
 {
@@ -37,26 +37,6 @@ class ServiceProvider extends Support\ServiceProvider
             __DIR__ . '/../config/og-image.php' => config_path('og-image.php'),
         ]);
 
-        $this->app->make('router')->get('/og-image', function (Request $request) {
-            $hash = md5(json_encode($request->query()));
-            $dir = storage_path('framework/cache/og-images');
-            $path = "{$dir}/{$hash}.png";
-
-            // Ensure the directory exists
-            if (!$this->app->make('files')->exists($dir)) {
-                $this->app->make('files')->makeDirectory($dir);
-            }
-
-            // does the image already exist?
-            if ($this->app->make('files')->exists($path)) {
-                return response()->file($path, headers: ['Content-Type' => 'image/png']);
-            }
-
-            $image = $this->app->make('og-image.generator')->make($request->get('template'), $request->except('template'));
-
-            $this->app->make('files')->put($path, $image->toPng());
-
-            return $image;
-        });
+        $this->app->make('router')->get('/og-image', OGImageController::class);
     }
 }
