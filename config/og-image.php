@@ -3,7 +3,7 @@
 use HeadlessChromium\Page;
 
 return [
-    'binary' => env('CHROME_PATH', 'chrome'),
+    'binary' => env('CHROME_PATH'),
     'template_dir' => 'og-image',
     'no_sandbox' => false,
     'ignore_certificate_errors' => true,
