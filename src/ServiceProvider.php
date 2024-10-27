@@ -42,6 +42,8 @@ class ServiceProvider extends Support\ServiceProvider
 
         RateLimiter::for('og-image', fn(Request $request) => Limit::perSecond(1)->by($request->ip()));
 
-        $this->app->make('router')->get('/og-image', OGImageController::class)->middleware('throttle:og-image');
+        $this->app->make('router')->get('/og-image', OGImageController::class)
+            ->name('og-image')
+            ->middleware('throttle:og-image');
     }
 }
